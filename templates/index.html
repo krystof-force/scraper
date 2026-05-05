@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { 
+            text-align: center; 
+            font-family: sans-serif; 
+            padding-top: 50px; 
+        }
+        .search-box { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-bottom: 30px;
+        }
+        .result { 
+            text-align: left; 
+            max-width: 600px; 
+            margin: 20px auto; 
+        }
+    </style>
+</head>
+<body>
+    <h1  style="text-align:center">Vyhledávač DuckDuckGo, protože google zlobil</h1>
+    
+    <div class="search-box">
+        <form method="POST">
+            <input type="text" name="query" placeholder="Co chcete najít?" value="{{ query if query }}" required>
+            <button type="submit">Hledat</button>
+        </form>
+        {% if results %}
+        <form action="/save" method="POST" style="display: inline; margin-left: 10px;">
+            <button type="submit">Stáhnout JSON</button>
+        </form>
+        {% endif %}
+    </div>
+
+    {% if results %}
+        <h2>Výsledky pro: "{{ query }}"</h2>
+        {% for r in results %}
+            <div class="result">
+                <a href="{{ r.href }}" target="_blank">{{ r.title }}</a>
+                <div class="url">{{ r.href }}</div>
+                <p>{{ r.body }}</p>
+            </div>
+        {% endfor %}
+    {% elif query %}
+        <p>Nebyly nalezeny žádné výsledky.</p>
+    {% endif %}
+</body>
+</html>
